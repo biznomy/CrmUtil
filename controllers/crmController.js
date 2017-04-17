@@ -76,32 +76,9 @@ module.exports = {
                 var crm = crms[i];
                 var person = {};
                 var company = {};
-                var result = {};
+                var result = {};                          
 
-                if(crm.firstname){
-                    person['name'] = crm.firstname;    
-                }
-                if(crm.lastname){
-                 person['name'] += " " + crm.lastname;       
-                }
-
-                
-                person['email'] = crm.email;
-                person['firstname'] = crm.firstname;
-                person['lastname'] = crm.lastname;
-                let lk_person = {};
-                lk_person['designation'] = crm.designation;
-                lk_person['headline'] = crm.designation;
-                lk_person['url'] = crm.lk_url;
-                person['lk'] = lk_person;
-
-                var imPerson = new PersonModel(person);
-
-                imPerson.save(person, function(err, info) {
-                    if (err) console.log(err);
-                    console.log("success", info._id);
-                });           
-
+                //Save Company
                 company['title'] = crm.company_name;
                 company['website'] = crm.www;
                 let address = {};
@@ -118,6 +95,39 @@ module.exports = {
                     if (err) console.log(err);
                     console.log("success", info._id);                  
                 });
+
+                if(crm.firstname){
+                    person['name'] = crm.firstname;    
+                }
+                if(crm.lastname){
+                 person['name'] += " " + crm.lastname;       
+                }
+
+                //Save Person
+                person['email'] = crm.email;
+                person['firstname'] = crm.firstname;
+                person['lastname'] = crm.lastname;
+                let lk_person = {};
+                lk_person['designation'] = crm.designation;
+                lk_person['headline'] = crm.designation;
+                lk_person['url'] = crm.lk_url;
+                person['lk'] = lk_person;
+
+
+                companies = [];
+                companies.push(imCompany._id);
+                person['companies'] = companies;
+
+                var imPerson = new PersonModel(person);
+
+                imPerson.save(person, function(err, info) {
+                    if (err) console.log(err);
+                    console.log("success", info._id);
+                });
+
+
+
+
                 results.push({'id processed': crm._id});
             }
             return res.json(results);
